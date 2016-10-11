@@ -1,0 +1,6 @@
+[
+	{ "keys": ["alt+shift+a"], "command": "ssh_add_client" },
+	{ "keys": ["alt+shift+r"], "command": "ssh_remove_client" },	
+	{ "keys": ["alt+shift+o"], "command": "ssh_open_file" },
+	{ "keys": ["alt+shift+s"], "command": "ssh_save_file" }
+]

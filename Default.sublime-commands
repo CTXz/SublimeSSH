@@ -1,0 +1,38 @@
+[
+    {
+        "caption": "SublimeSSH: Add Client",
+        "command": "ssh_add_client"
+    },
+    {
+        "caption": "SublimeSSH: Remove Client",
+        "command": "ssh_remove_client"
+    },
+    {
+        "caption": "SublimeSSH: Select Client",
+        "command": "ssh_set_client"
+    },   
+    {
+        "caption": "SublimeSSH: Modify Credentials",
+        "command": "ssh_set_credentials"
+    },
+    {
+        "caption": "SublimeSSH: Display Credentials",
+        "command": "ssh_display_credentials"
+    },
+    {
+        "caption": "SublimeSSH: List Clients",
+        "command": "ssh_list_clients"
+    },
+    {
+        "caption": "SublimeSSH: Check Connection",
+        "command": "ssh_ping"
+    },
+    {
+        "caption": "SublimeSSH: Open File",
+        "command": "ssh_open_file"
+    },  
+    {
+        "caption": "SublimeSSH: Save File",
+        "command": "ssh_save_file"
+    }      
+]
