@@ -1,3 +1,17 @@
+# Copyright 2016 Patrick Pedersen <ctx.xda@gmail.com>
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+
+#     http://www.apache.org/licenses/LICENSE-2.0
+
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import sublime
 import subprocess
 import os
@@ -107,7 +121,6 @@ class SSHFile:
 		self.ssh 		 = SSHInterface
 		self.local_path  = "%(1)s/%(2)s/%(3)s%(4)s" % {"1" : tempdir, "2" : self.ssh.remote_host, "3" : self.ssh.remote_user, "4" : self.remote_path}
 
-	window = None
 	view = None
 
 	# open
@@ -228,14 +241,13 @@ class SshOpenFileCommand(WindowCommand):
 	def on_done_open(self, input):
 		fileList.append(SSHFile(selectedInterface, input))
 		if fileList[len(fileList) - 1].open():
-			fileList[len(fileList) - 1].view   = self.window.open_file(fileList[len(fileList) - 1].local_path)
-			fileList[len(fileList) - 1].window = fileList[len(fileList) - 1].view.window()
+		   fileList[len(fileList) - 1].view = self.window.open_file(fileList[len(fileList) - 1].local_path)
 
 class SshSaveFileCommand(WindowCommand):
 	def run(self):
 		if selectedInterface != None:
 			for files in range(0, len(fileList)):
-				if self.window.id() == fileList[files].window.id() and self.window.active_view().id() == fileList[files].view.id():
+				if self.window.active_view().id() == fileList[files].view.id():
 					fileList[files].save()
 					break
 		else:
