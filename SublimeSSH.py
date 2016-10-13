@@ -248,6 +248,7 @@ class SshSaveFileCommand(WindowCommand):
 		if selectedInterface != None:
 			for files in range(0, len(fileList)):
 				if self.window.active_view().id() == fileList[files].view.id():
+					self.window.run_command("save_all")
 					fileList[files].save()
 					break
 		else:
