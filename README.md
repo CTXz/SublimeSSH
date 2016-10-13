@@ -1,12 +1,12 @@
-# Sublime Text SSH Plug-In
+# Sublime Text 3 SSH Forwarding Plug-In
 
 This is a simple SSH Plug-In for Sublime Text 3 that allows the user to edit remote SSH files straight from Sublime Text 3.
-It support editing of mutiple filesh from even mutiple servers.
+It support editing of mutiple files from even mutiple servers.
 
 Please note that this Plug-In only supports Linux machines at the moment
 
 ## Installation
-Before you install this plug in you will require the following tools for your Linux Distribtuion :
+Before you install this Plug-In you will require the following tools for your Linux Distribtuion :
 ```
 ssh
 sshpass
@@ -14,10 +14,9 @@ sshpass
 
 Once the necessary tools/packages have been installed, you may go ahead and clone this repository into your Sublime Packages Directory.
 
-
 ## Usage
 
-Using this Plug-In is fairly straight forward, for a full list of commands see the command section below.
+Using this Plug-In is fairly simple, for a full list of commands see the command section below.
 
 Start out by creating a SSH Interface. This can be done using <b> ALT + SHIFT + A </b>
 
