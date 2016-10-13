@@ -23,20 +23,20 @@ local_dir = os.path.dirname(os.path.realpath(__file__))
 home_dir  = "/home/%s" % os.popen('echo -n $(whoami)').read()
 tempdir	  = "%s/.sublimeSSH" % home_dir
 
-# Inteface/Client selection 
+# Inteface/Client selection
 selectedInterface = None
-interfaceList 	  = []
-fileList		  = []
+interfaceList     = []
+fileList          = []
 
 ## Classes ##
 
 # SSH #
 class SSHInterface:
-	remote_port		= 22
+	remote_port     = 22
 
 	remote_address  = None
-	remote_user		= None
-	remote_host  	= None
+	remote_user     = None
+	remote_host     = None
 	remote_password = None
 
 	# set
@@ -46,12 +46,12 @@ class SSHInterface:
 	# Args:
 	#	input : SSH address + password in the following format : [user@host password]
 	def set(self, input):
-		address 		= input.partition(" ")[0]
-		password 		= input.partition(" ")[2]
+		address				 = input.partition(" ")[0]
+		password			 = input.partition(" ")[2]
 
 		self.remote_address	 = address
-		self.remote_user 	 = address.partition("@")[0]
-		self.remote_host 	 = address.partition("@")[2]
+		self.remote_user	 = address.partition("@")[0]
+		self.remote_host	 = address.partition("@")[2]
 		self.remote_password = password
 
 	# ping
@@ -59,9 +59,9 @@ class SSHInterface:
 	# Checks connection to remote host
 	#
 	# Returns :
-	# 	On Success 				  	   : True
-	# 	On Failure(Missing Application):-1
-	# 	On Unavailable Connection 	   : False
+	# 	On Success                      : True
+	# 	On Failure(Missing Application) :-1
+	# 	On Unavailable Connection       : False
 	def ping(self):
 		state = os.popen('sh %(1)s/ping.sh %(2)s %(3)s %(4)s' % {"1" : local_dir, "2" : self.remote_user, "3" : self.remote_host, "4" : self.remote_password}).read()
 		
@@ -90,7 +90,7 @@ class SSHInterface:
 	#
 	# Returns :
 	#	On Successfull transfer : True
-	#	On Failed transfer 		: False
+	#	On Failed transfer      : False
 	def pull(self, remote_path, local_path):
 		if self.ping():
 			if os.popen('sh %(1)s/pull.sh %(2)s %(3)s %(4)s %(5)s %(6)s' % {"1": local_dir, "2" : self.remote_user, "3" : self.remote_host, "4" : self.remote_password, "5" : remote_path, "6" : local_path}).read() == "1":
@@ -107,7 +107,7 @@ class SSHInterface:
 	#
 	# Returns :
 	#	On Successfull transfer : True
-	#	On Failed transfer 		: False
+	#	On Failed transfer      : False
 	def push(self, local_path, remote_path):
 		if self.ping():
 			if os.popen('sh %(1)s/push.sh %(2)s %(3)s %(4)s %(5)s %(6)s' % {"1": local_dir, "2" : self.remote_user, "3" : self.remote_host, "4" : self.remote_password, "5" : local_path, "6" : remote_path}).read() == "1":
@@ -128,7 +128,7 @@ class SSHFile:
 	#
 	# Returns :
 	#	On Success  : True
-	#	On Fail		`: False
+	#	On Fail     : False
 	def open(self):
 		os.popen('mkdir -p %s' % os.path.dirname(self.local_path))
 		if self.ssh.pull(self.remote_path, self.local_path):
@@ -141,7 +141,7 @@ class SSHFile:
 	#
 	# Returns :
 	#	On Success  : 1
-	#	On Fail 	: 0
+	#	On Fail     : 0
 	def save(self):
 		if os.path.isfile(self.local_path):
 			if self.ssh.push(self.local_path, self.remote_path):
