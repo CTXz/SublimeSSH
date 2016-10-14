@@ -34,5 +34,9 @@
     {
         "caption": "SublimeSSH: Save File",
         "command": "ssh_save_file"
-    }      
+    },
+    {
+        "caption": "SublimeSSH: Close Files",
+        "command": "ssh_close_files"
+    }
 ]

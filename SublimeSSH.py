@@ -254,5 +254,16 @@ class SshSaveFileCommand(WindowCommand):
 		else:
 			print('No Clients available, please add clients via the "Add Client" command')
 
+class SshCloseFilesCommand(WindowCommand):
+	def run(self):
+		for window in sublime.windows():
+			for view in window.views():
+				for file in fileList:
+					if view.id() == file.view.id():
+						window.focus_view(view)
+						view.set_scratch(True)
+						window.run_command("close_file")
+
 def plugin_unloaded():
 	os.popen('rm -r %s' % tempdir)
+	sublime.active_window ().run_command ("ssh_close_files") 
