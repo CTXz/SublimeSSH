@@ -226,8 +226,8 @@ class SshDisplayCredentialsCommand(WindowCommand):
 class SshListClientsCommand(WindowCommand):
 	def run(self):
 		if selectedInterface != None:
-			for interfaces in range(0, len(interfaceList)):
-				print("%(1)s\t\t%(2)s" % { "1" : interfaces, "2" : interfaceList[interfaces].remote_address})
+			for interfaces in interfaceList:
+				print("%(1)s\t\t%(2)s" % { "1" : interfaces, "2" : interfaces.remote_address})
 		else:
 			print('No Clients available, please add clients via the "Add Client" command')
 
@@ -246,11 +246,14 @@ class SshOpenFileCommand(WindowCommand):
 class SshSaveFileCommand(WindowCommand):
 	def run(self):
 		if selectedInterface != None:
-			for files in range(0, len(fileList)):
-				if self.window.active_view().id() == fileList[files].view.id():
-					self.window.run_command("save_all")
-					fileList[files].save()
-					break
+			if len(fileList) != 0:
+				for file in fileList:
+					if self.window.active_view().id() == file.view.id():
+						self.window.run_command("save_all")
+						file.save()
+						break
+			else:
+				print("No SSH Files open!")
 		else:
 			print('No Clients available, please add clients via the "Add Client" command')
 
