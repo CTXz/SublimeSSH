@@ -14,14 +14,19 @@
 
 #!/bin/bash
 
-#$1 = User
-#$2 = Remote Host
-#$3 = Password
-#$4 = Target local file
-#$5 = Remote host destination
+#$1 = Timeout
+#$2 = User
+#$3 = Remote Host
+#$4 = Password
+#$5 = Target local file
+#$6 = Remote host destination
 
 # Push
-sshpass -p $3 scp -o StrictHostKeyChecking=no $4 $1@$2:$5
+if [[ $1 == "0" ]]; then
+	sshpass -p $4 scp -o StrictHostKeyChecking=no -o ConnectTimeout=$1 $5 $2@$3:$6
+else
+	sshpass -p $4 scp -o StrictHostKeyChecking=no $5 $2@$3:$6
+fi
 
 # SCP Succeeded
 if [[ $(sshpass -p $3 ssh -o StrictHostKeyChecking=no -l $1 $2 "find $5") == $5 && \

@@ -14,9 +14,10 @@
 
 #!/bin/bash
 
-#$1 = User
-#$2 = Remote Host
-#$3 = Password
+#$1 = Timeout
+#$2 = User
+#$3 = Remote Host
+#$4 = Password
 
 # Missing ssh
 if  [ ! -f "/usr/bin/ssh" ]; then
@@ -27,8 +28,12 @@ elif [ ! -f "/usr/bin/sshpass" ]; then
 	printf 3
 
 
-# Connection Established
-elif [[ $(sshpass -p $3 ssh -o StrictHostKeyChecking=no -l $1 $2 "echo 1") == 1 ]]; then
+# Connection Established 
+elif [[ $1 == "0" && $(sshpass -p $4 ssh -o StrictHostKeyChecking=no -l $2 $3 "echo 1") == 1 ]]; then
+	printf 1
+
+# Connection Established with timeout
+elif [[ $(sshpass -p $4 ssh -o StrictHostKeyChecking=no -o ConnectTimeout=$1 -l $2 $3 "echo 1") == 1 ]]; then
 	printf 1
 
 # Connection failed

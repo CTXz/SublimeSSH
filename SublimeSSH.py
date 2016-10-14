@@ -39,6 +39,9 @@ class SSHInterface:
 	remote_host     = None
 	remote_password = None
 
+	#Default Off
+	timeout         = 0
+
 	# set
 	#
 	# Sets credentials for the SSH Interface instance
@@ -63,7 +66,7 @@ class SSHInterface:
 	# 	On Failure(Missing Application) :-1
 	# 	On Unavailable Connection       : False
 	def ping(self):
-		state = os.popen('sh %(1)s/ping.sh %(2)s %(3)s %(4)s' % {"1" : local_dir, "2" : self.remote_user, "3" : self.remote_host, "4" : self.remote_password}).read()
+		state = os.popen('sh %(1)s/ping.sh %(2)s %(3)s %(4)s %(5)s' % {"1" : local_dir, "2" : self.timeout, "3" : self.remote_user, "4" : self.remote_host, "5" : self.remote_password}).read()
 		
 		if state == "1":
 			print("Connection to %s established!" % self.remote_user)
@@ -77,7 +80,11 @@ class SSHInterface:
 			print ("sshpass not installed!")
 			return -1
 		
-		print("Connection to %s could not be established!" % self.remote_address)
+		elif state == "0" and self.timeout == 0:
+			print("Connection to %s could not be established!" % self.remote_address)
+		else:
+			print("Connection to %s could not be established! Timed out!" % self.remote_address)
+
 		return False
 
 	# pull
@@ -93,7 +100,7 @@ class SSHInterface:
 	#	On Failed transfer      : False
 	def pull(self, remote_path, local_path):
 		if self.ping():
-			if os.popen('sh %(1)s/pull.sh %(2)s %(3)s %(4)s %(5)s %(6)s' % {"1": local_dir, "2" : self.remote_user, "3" : self.remote_host, "4" : self.remote_password, "5" : remote_path, "6" : local_path}).read() == "1":
+			if os.popen('sh %(1)s/pull.sh %(2)s %(3)s %(4)s %(5)s %(6)s %(7)s' % {"1" : local_dir, "2": self.timeout, "3" : self.remote_user, "4" : self.remote_host, "5" : self.remote_password, "6" : remote_path, "7" : local_path}).read() == "1":
 				return True
 		return False
 
@@ -110,7 +117,7 @@ class SSHInterface:
 	#	On Failed transfer      : False
 	def push(self, local_path, remote_path):
 		if self.ping():
-			if os.popen('sh %(1)s/push.sh %(2)s %(3)s %(4)s %(5)s %(6)s' % {"1": local_dir, "2" : self.remote_user, "3" : self.remote_host, "4" : self.remote_password, "5" : local_path, "6" : remote_path}).read() == "1":
+			if os.popen('sh %(1)s/push.sh %(2)s %(3)s %(4)s %(5)s %(6)s %(7)s' % {"1": local_dir, "2": self.timeout, "3" : self.remote_user, "4" : self.remote_host, "5" : self.remote_password, "6" : local_path, "7" : remote_path}).read() == "1":
 				return True
 		return False
 
@@ -231,6 +238,16 @@ class SshListClientsCommand(WindowCommand):
 		else:
 			print('No Clients available, please add clients via the "Add Client" command')
 
+class SshSetTimeoutCommand(WindowCommand):
+	def run(self):
+		if selectedInterface != None:
+			self.window.show_input_panel("Set Timeout in Seconds (0 to disable)", str(selectedInterface.timeout), self.on_done_set_timeout, None, None)
+		else:
+			print('No Clients available, please add clients via the "Add Client" command')			
+
+	def on_done_set_timeout(self, input):
+		selectedInterface.timeout = int(input)
+
 class SshOpenFileCommand(WindowCommand):
 	def run(self):
 		if selectedInterface != None:
@@ -269,4 +286,4 @@ class SshCloseFilesCommand(WindowCommand):
 
 def plugin_unloaded():
 	os.popen('rm -r %s' % tempdir)
-	sublime.active_window ().run_command ("ssh_close_files") 
+	sublime.active_window ().run_command ("ssh_close_files")

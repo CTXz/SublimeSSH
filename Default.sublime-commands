@@ -24,6 +24,10 @@
         "command": "ssh_list_clients"
     },
     {
+        "caption": "SublimeSSH: Set Timeout Limit",
+        "command": "ssh_set_timeout"
+    },
+    {
         "caption": "SublimeSSH: Check Connection",
         "command": "ssh_ping"
     },

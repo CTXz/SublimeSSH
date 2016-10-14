@@ -14,14 +14,19 @@
 
 #!/bin/bash
 
-#$1 = User
-#$2 = Remote Host
-#$3 = Password
-#$4 = Target Host File
-#$5 = Local Destination
+#$1 = Timeout
+#$2 = User
+#$3 = Remote Host
+#$4 = Password
+#$5 = Target Host File
+#$6 = Local Destination
 
 # Pull
-sshpass -p $3 scp -o StrictHostKeyChecking=no $1@$2:$4 $5
+if [[ $1 == "0" ]]; then
+	sshpass -p $4 scp -o StrictHostKeyChecking=no -o ConnectTimeout=$1 $2@$3:$5 $6
+else
+	sshpass -p $4 scp -o StrictHostKeyChecking=no $2@$3:$5 $6
+fi
 
 # SCP Succeeded
 if [[ -f $5 ]]; then
