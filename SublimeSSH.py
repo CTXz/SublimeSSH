@@ -232,9 +232,11 @@ class SshDisplayCredentialsCommand(WindowCommand):
 
 class SshListClientsCommand(WindowCommand):
 	def run(self):
+		count = 0;
 		if selectedInterface != None:
 			for interfaces in interfaceList:
-				print("%(1)s\t\t%(2)s" % { "1" : interfaces, "2" : interfaces.remote_address})
+				print("%(1)s\t\t%(2)s" % { "1" : count, "2" : interfaces.remote_address})
+				count += 1
 		else:
 			print('No Clients available, please add clients via the "Add Client" command')
 
