@@ -194,7 +194,8 @@ class SshSetClientCommand(TextCommand):
 			print('No Clients available, please add clients via the "Add Client" command')			
 
 	def on_done_set(self, input):
-		if int(input) >= 0 and int(input) < len(interfaceList):						
+		if int(input) >= 0 and int(input) < len(interfaceList):	
+			global selectedInterface					
 			selectedInterface = interfaceList[int(input)]
 			print("Switched to client %(1)s : %(2)s" % {"1" : input, "2" : selectedInterface.remote_address})
 		else:
