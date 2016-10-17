@@ -19,6 +19,12 @@
 #$3 = Remote Host
 #$4 = Password
 
+OPTIONS="-o StrictHostKeyChecking=no"
+
+if [[ $1 == "0" ]]; then
+	OPTIONS+=" -o ConnectTimeout=$1"
+fi
+
 # Missing ssh
 if  [ ! -f "/usr/bin/ssh" ]; then
 	printf 2

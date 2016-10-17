@@ -21,12 +21,14 @@
 #$5 = Target Host File
 #$6 = Local Destination
 
-# Pull
+OPTIONS="-o StrictHostKeyChecking=no" 
+
 if [[ $1 == "0" ]]; then
-	sshpass -p $4 scp -o StrictHostKeyChecking=no -o ConnectTimeout=$1 $2@$3:$5 $6
-else
-	sshpass -p $4 scp -o StrictHostKeyChecking=no $2@$3:$5 $6
+	OPTIONS+=" -o ConnectTimeout=$1"
 fi
+
+# Pull
+	sshpass -p $4 scp $OPTIONS $2@$3:$5 $6
 
 # SCP Succeeded
 if [[ -f $5 ]]; then

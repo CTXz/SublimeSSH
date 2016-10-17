@@ -21,16 +21,18 @@
 #$5 = Target local file
 #$6 = Remote host destination
 
-# Push
+OPTIONS="-o StrictHostKeyChecking=no" 
+
 if [[ $1 == "0" ]]; then
-	sshpass -p $4 scp -o StrictHostKeyChecking=no -o ConnectTimeout=$1 $5 $2@$3:$6
-else
-	sshpass -p $4 scp -o StrictHostKeyChecking=no $5 $2@$3:$6
+	OPTIONS+=" -o ConnectTimeout=$1"
 fi
 
+# Push
+sshpass -p $4 scp $OPTIONS $5 $2@$3:$6
+
 # SCP Succeeded
-if [[ $(sshpass -p $3 ssh -o StrictHostKeyChecking=no -l $1 $2 "find $5") == $5 && \
-	 "$(cat $4)" == "$(sshpass -p $3 ssh -o StrictHostKeyChecking=no -l $1 $2 "cat $5")" ]]; then
+if [[ $(sshpass -p $4 ssh $OPTIONS -l $2 $3 "find $6") == $6 && \
+	 "$(cat $5)" == "$(sshpass -p $4 ssh $OPTIONS -l $2 $3 "cat $6")" ]]; then
 	printf 1
 
 # SCP failed!
