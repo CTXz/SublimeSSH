@@ -31,7 +31,7 @@ fi
 	sshpass -p $4 scp $OPTIONS $2@$3:$5 $6
 
 # SCP Succeeded
-if [[ -f $5 ]]; then
+if [ -f $6 ]; then
 	printf 1
 
 # SCP failed!
