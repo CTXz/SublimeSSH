@@ -15,6 +15,7 @@
 import sublime
 import subprocess
 import os
+import sublime_plugin
 
 from sublime_plugin import WindowCommand, TextCommand, EventListener
 
@@ -67,7 +68,7 @@ class SSHInterface:
 	# 	On Unavailable Connection       : False
 	def ping(self):
 		state = os.popen('sh %(1)s/ping.sh %(2)s %(3)s %(4)s %(5)s' % {"1" : local_dir, "2" : self.timeout, "3" : self.remote_user, "4" : self.remote_host, "5" : self.remote_password}).read()
-		
+
 		if state == "1":
 			print("Connection to %s established!" % self.remote_user)
 			return True;
@@ -140,6 +141,7 @@ class SSHFile:
 		os.popen('mkdir -p %s' % os.path.dirname(self.local_path))
 		if self.ssh.pull(self.remote_path, self.local_path):
 			return True
+		
 		print("Unable to Open %s" % self.remote_path)
 		return False
 
@@ -228,6 +230,7 @@ class SshDisplayCredentialsCommand(WindowCommand):
 			print(selectedInterface.remote_user)
 			print(selectedInterface.remote_host)
 			print(selectedInterface.remote_password)
+			print("Timeout in s = %s" % selectedInterface.timeout)
 		else:
 			print('No Clients available, please add clients via the "Add Client" command')
 
@@ -260,8 +263,9 @@ class SshOpenFileCommand(WindowCommand):
 
 	def on_done_open(self, input):
 		fileList.append(SSHFile(selectedInterface, input))
-		if fileList[len(fileList) - 1].open():
-		   fileList[len(fileList) - 1].view = self.window.open_file(fileList[len(fileList) - 1].local_path)
+		
+		if fileList[len(fileList) - 1].open() == True:
+			fileList[len(fileList) - 1].view = self.window.open_file(fileList[len(fileList) - 1].local_path)
 
 class SshSaveFileCommand(WindowCommand):
 	def run(self):
@@ -281,12 +285,19 @@ class SshCloseFilesCommand(WindowCommand):
 	def run(self):
 		for window in sublime.windows():
 			for view in window.views():
-				for file in fileList:
-					if view.id() == file.view.id():
+				for SSHFile in fileList:
+					if view.id() == SSHFile.view.id():
 						window.focus_view(view)
 						view.set_scratch(True)
 						window.run_command("close_file")
 
+class OnCloseSSHFile(sublime_plugin.EventListener):
+	def on_pre_close(self, view):
+		for SSHFile in fileList:
+			if view.id() == SSHFile.view.id():
+				fileList.remove(SSHFile)
+				print("SSH File closed")
+
 def plugin_unloaded():
 	os.popen('rm -r %s' % tempdir)
-	sublime.active_window ().run_command ("ssh_close_files")
+	sublime.active_window().run_command ("ssh_close_files")
